@@ -1,12 +1,4 @@
 
-const STAFF_NAME_MAP = {
-  "田中": "加藤知子",
-  "佐藤": "本庄和志",
-  "鈴木": "山口活樹",
-  "高橋": "中井弘也",
-  "上部": "中西崇之"
-};
-
 const staffOptions = ["加藤知子","本庄和志","山口活樹","中井弘也","中西崇之"];
 const initialStaff = [
   { id: 1, name: "加藤知子", company: "デザインバンク", role: "ディレクター", email: "kato@design.co.jp", hoursPerDay: 8, skills: ["進行管理","クライアント対応"] },
@@ -72,29 +64,9 @@ const baseOrders = [
   { id: 1, projectName: "バナー制作", client: "A社", status: "納期OK", judge: "社内対応", amount: 50000, assignee: "加藤知子", finishDate: "2026-03-25", notes: "初回制作。ロゴ位置は中央寄せ。", history: [], notice: "" },
   { id: 2, projectName: "LPデザイン", client: "B社", status: "納期NG", judge: "外注推奨", amount: 120000, assignee: "本庄和志", finishDate: "2026-03-28", notes: "訴求文言の再確認が必要。", history: [], notice: "", outsourceStatus: "依頼済み", outsourceVendor: "外注デザイン社", outsourceMemo: "急ぎ案件", receivedDate: "" },
   { id: 3, projectName: "SNSキャンペーン画像", client: "チャッピー株式会社", status: "納品受信", judge: "納品受信", amount: 330000, assignee: "中井弘也", finishDate: "2026-03-20", notes: "納品済み。次回は同テイストで展開予定。", history: ["外注先より納品完了"], notice: "" },
+  { id: 4, projectName: "入稿サポート", client: "ソフトバンク", status: "納期OK", judge: "社内対応", amount: 90000, assignee: "中西崇之", finishDate: "2026-03-27", notes: "確認と入稿作業。", history: [], notice: "" },
 ];
 const initialOrders = baseOrders.map(o => ({ ...o, notice: buildNotice(o) }));
-
-function normalizeAssigneeName(name){
-  return STAFF_NAME_MAP[name] || name;
-}
-function migrateStaffRecord(member){
-  const normalizedName = normalizeAssigneeName(member.name);
-  const defaults = initialStaff.find(s => s.name === normalizedName) || {};
-  return {
-    ...defaults,
-    ...member,
-    name: normalizedName,
-    company: member.company || defaults.company || "",
-    email: member.email || defaults.email || ""
-  };
-}
-function migrateOrderRecord(order){
-  const normalizedAssignee = normalizeAssigneeName(order.assignee);
-  const nextOrder = { ...order, assignee: normalizedAssignee };
-  nextOrder.notice = buildNotice(nextOrder);
-  return nextOrder;
-}
 
 const sampleClients = ["チャッピー株式会社","A社","B社","KKKスポーツ","日本商事","鳥取デザイン","山陰フーズ","未来企画","ブルースカイ","オレンジ不動産"];
 const sampleProjects = ["Instagramバナー","採用LP","春キャンペーン画像","会社案内デザイン","商品パッケージ","イベントチラシ","コーポレートサイト改修","EC商品画像","ロゴリニューアル","SNS広告セット"];
@@ -194,15 +166,6 @@ const state = {
   notificationFilterType: "all",
   notificationQuery: "",
 };
-
-state.staff = state.staff.map(migrateStaffRecord);
-state.orders = state.orders.map(migrateOrderRecord);
-if (state.createForm) {
-  state.createForm.assignee = normalizeAssigneeName(state.createForm.assignee || staffOptions[0]);
-}
-if (state.assigneeFilter && state.assigneeFilter !== "all") {
-  state.assigneeFilter = normalizeAssigneeName(state.assigneeFilter);
-}
 
 
 function logNotification(type, target, message){
@@ -718,23 +681,15 @@ function renderCustomers(){
 function renderStaff(){
   return `<div class="page-head"><div><div class="page-title">スタッフ管理</div><div class="page-sub">担当者の役割と稼働状況</div></div><button class="btn primary" onclick="openStaffEditor()">スタッフ追加</button></div>
   <div class="staff-grid">${state.staff.map(member=>{
-    const aliases = Object.entries(STAFF_NAME_MAP).filter(([, v]) => v === member.name).map(([k]) => k);
-    const validNames = [member.name, ...aliases];
-    const load = state.orders
-      .filter(o => validNames.includes(o.assignee) && o.status !== "納品受信")
-      .reduce((sum,o)=>sum+Math.max(Math.round(Number(o.amount||0)/10000),4),0);
+    const activeOrders = state.orders.filter(o=>o.assignee===member.name && o.status!=="納品受信");
+    const orderLoad = activeOrders.reduce((sum,o)=>sum+Math.max(Math.round(Number(o.amount||0)/10000),4),0);
+    const load = orderLoad > 0 ? orderLoad : Number(member.hoursPerDay || 0);
     const percent = Math.min(Math.round(load/40*100),100);
-    const avatar = String(member.name || "?").slice(0,1);
     return `<div class="card">
       <div style="display:flex;justify-content:space-between;gap:12px">
-        <div class="staff-head">
-          <div class="staff-name-wrap">
-            <div class="staff-avatar">${esc(avatar)}</div>
-            <div>
-              <div style="font-size:18px;font-weight:800">${esc(member.name)}</div>
-              <div class="help" style="margin-top:4px">${esc(member.role)}</div>
-            </div>
-          </div>
+        <div>
+          <div style="font-size:18px;font-weight:800">${esc(member.name)}</div>
+          <div class="help" style="margin-top:4px">${esc(member.role)}</div>
         </div>
         <div class="badge ok">稼働中</div>
       </div>
