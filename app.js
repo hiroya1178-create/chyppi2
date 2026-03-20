@@ -795,12 +795,12 @@ function renderCalendarDetailModal(){
   const alert = getDeadlineAlert(order);
   return `<div class="modal-backdrop" onclick="if(event.target===this) closeCalendarDetail()"><div class="modal" style="width:min(820px,100%)"><div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px"><div><h3 style="margin:0 0 6px">案件詳細</h3><div class="help">カレンダーの予定詳細</div></div><button class="btn" onclick="closeCalendarDetail()">閉じる</button></div>
   <div class="grid-2">
-    <div><div class="help" style="margin-bottom:6px">案件名</div><input value="${esc(order.projectName||"")}" readonly></div>
-    <div><div class="help" style="margin-bottom:6px">顧客名</div><input value="${esc(order.client||"")}" readonly></div>
-    <div><div class="help" style="margin-bottom:6px">担当者</div><input value="${esc(order.assignee||"")}" readonly></div>
+    <div><div class="help" style="margin-bottom:6px">案件名</div><input value="${esc(order.projectName)}" readonly></div>
+    <div><div class="help" style="margin-bottom:6px">顧客名</div><input value="${esc(order.client)}" readonly></div>
+    <div><div class="help" style="margin-bottom:6px">担当者</div><input value="${esc(order.assignee)}" readonly></div>
     <div><div class="help" style="margin-bottom:6px">完了予定日</div><input value="${esc(order.finishDate||"")}" readonly></div>
     <div><div class="help" style="margin-bottom:6px">金額</div><input value="${Number(order.amount||0).toLocaleString("ja-JP")}円" readonly></div>
-    <div><div class="help" style="margin-bottom:6px">判断</div><input value="${esc(order.judge||"")}" readonly></div>
+    <div><div class="help" style="margin-bottom:6px">判断</div><input value="${esc(order.judge)}" readonly></div>
     <div style="grid-column:1/-1"><div class="help" style="margin-bottom:6px">ステータス</div><div class="badges"><span class="alert-chip ${alert.cls}">${alert.label}</span><span class="badge ${statusClass(order.status)}">${esc(order.status)}</span><span class="badge ${judgeClass(order.judge)}">${esc(order.judge)}</span></div></div>
     <div style="grid-column:1/-1"><div class="help" style="margin-bottom:6px">メモ</div><textarea readonly style="min-height:120px">${esc(order.notes||"")}</textarea></div>
   </div>
