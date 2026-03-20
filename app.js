@@ -680,29 +680,7 @@ function renderCustomers(){
 
 function renderStaff(){
   return `<div class="page-head"><div><div class="page-title">スタッフ管理</div><div class="page-sub">担当者の役割と稼働状況</div></div><button class="btn primary" onclick="openStaffEditor()">スタッフ追加</button></div>
-  <div class="staff-grid">${state.staff.map(member=>{
-    const activeOrders = state.orders.filter(o=>o.assignee===member.name && o.status!=="納品受信");
-    const orderLoad = activeOrders.reduce((sum,o)=>sum+Math.max(Math.round(Number(o.amount||0)/10000),4),0);
-    const load = orderLoad > 0 ? orderLoad : Number(member.hoursPerDay || 0);
-    const percent = Math.min(Math.round(load/40*100),100);
-    return `<div class="card">
-      <div style="display:flex;justify-content:space-between;gap:12px">
-        <div>
-          <div style="font-size:18px;font-weight:800">${esc(member.name)}</div>
-          <div class="help" style="margin-top:4px">${esc(member.role)}</div>
-        </div>
-        <div class="badge ok">稼働中</div>
-      </div>
-      <div class="help" style="margin-top:14px">${esc(member.company || "")}</div>
-      <div class="help" style="margin-top:8px">${esc(member.email)}</div>
-      <div style="margin-top:14px">
-        <div style="display:flex;justify-content:space-between;font-size:12px;color:#64748b;margin-bottom:8px"><span>想定稼働</span><span>${load}時間</span></div>
-        <div class="progress"><div style="width:${percent}%"></div></div>
-      </div>
-      <div class="chips">${(member.skills||[]).map(s=>`<span class="chip">${esc(s)}</span>`).join("")}</div>
-      <div class="top-actions" style="margin-top:14px"><button class="btn" onclick="openStaffEditor(${member.id})">編集</button><button class="btn danger" onclick="deleteStaff(${member.id})">削除</button></div>
-    </div>`;
-  }).join("")}</div>${renderStaffModal()}`;
+  <div class="staff-grid">${state.staff.map(member=>{ const load = state.orders.filter(o=>o.assignee===member.name && o.status!=="納品受信").reduce((sum,o)=>sum+Math.max(Math.round(Number(o.amount||0)/10000),4),0); const percent = Math.min(Math.round(load/40*100),100); return `<div class="card"><div style="display:flex;justify-content:space-between;gap:12px"><div><div style="font-size:18px;font-weight:800">${esc(member.name)}</div><div class="help" style="margin-top:4px">${esc(member.role)}</div></div><div class="badge ok">稼働中</div></div><div class="help" style="margin-top:14px">${esc(member.company || "")}</div><div class="help" style="margin-top:8px">${esc(member.email)}</div><div style="margin-top:14px"><div style="display:flex;justify-content:space-between;font-size:12px;color:#64748b;margin-bottom:8px"><span>想定稼働</span><span>${load}時間</span></div><div class="progress"><div style="width:${percent}%"></div></div></div><div class="chips">${(member.skills||[]).map(s=>`<span class="chip">${esc(s)}</span>`).join("")}</div><div class="top-actions" style="margin-top:14px"><button class="btn" onclick="openStaffEditor(${member.id})">編集</button><button class="btn danger" onclick="deleteStaff(${member.id})">削除</button></div></div>`; }).join("")}</div>${renderStaffModal()}`;
 }
 function renderStaffModal(){
   if(!state.staffEditorOpen) return "";
@@ -740,7 +718,7 @@ function saveStaff(){
   if(state.editingStaffId){
     state.staff = state.staff.map(s=>s.id===state.editingStaffId?{...s,skills:(s.skills||[]).map(x=>String(x).trim()).filter(Boolean)}:s);
   }else{
-    const d = state._draftStaff || {name:"",icon:"",role:"デザイナー",email:"",hoursPerDay:8,skills:[""]};
+    const d = state._draftStaff || {name:"",icon:"",company:"",role:"デザイナー",email:"",hoursPerDay:8,skills:[""]};
     if(!d.name || !d.name.trim()) return;
     state.staff = [{...d,id:Date.now(),skills:(d.skills||[]).map(x=>String(x).trim()).filter(Boolean)}, ...state.staff];
     delete state._draftStaff;
