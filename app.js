@@ -1,11 +1,11 @@
 
 const staffOptions = ["加藤知子","本庄和志","山口活樹","中井弘也","中西崇之"];
 const initialStaff = [
-  { id: 1, name: "加藤知子", company: "デザインバンク", role: "ディレクター", email: "kato@design.co.jp", hoursPerDay: 8, skills: ["進行管理","クライアント対応"] },
-  { id: 2, name: "本庄和志", company: "鳥取大学", role: "デザイナー", email: "honjo@design.co.jp", hoursPerDay: 8, skills: ["LP","バナー","UI"] },
-  { id: 3, name: "山口活樹", company: "東亜青果", role: "イラストレーター", email: "yamaguchi@design.co.jp", hoursPerDay: 8, skills: ["イラスト","パッケージ"] },
-  { id: 4, name: "中井弘也", company: "北村屋木材", role: "フロントエンド", email: "nakai@design.co.jp", hoursPerDay: 8, skills: ["コーディング","レスポンシブ"] },
-  { id: 5, name: "中西崇之", company: "ソフトバンク", role: "アシスタント", email: "nakanishi@design.co.jp", hoursPerDay: 8, skills: ["進行補助","入稿"] },
+  { id: 1, name: "加藤知子", company: "デザインバンク", role: "ディレクター", email: "kato@design.co.jp", hoursPerDay: 8, skills: ["進行管理","クライアント対応"], avatar: "加" },
+  { id: 2, name: "本庄和志", company: "鳥取大学", role: "デザイナー", email: "honjo@design.co.jp", hoursPerDay: 8, skills: ["LP","バナー","UI"], avatar: "本" },
+  { id: 3, name: "山口活樹", company: "東亜青果", role: "イラストレーター", email: "yamaguchi@design.co.jp", hoursPerDay: 8, skills: ["イラスト","パッケージ"], avatar: "山" },
+  { id: 4, name: "中井弘也", company: "北村屋木材", role: "フロントエンド", email: "nakai@design.co.jp", hoursPerDay: 8, skills: ["コーディング","レスポンシブ"], avatar: "中" },
+  { id: 5, name: "中西崇之", company: "ソフトバンク", role: "アシスタント", email: "nakanishi@design.co.jp", hoursPerDay: 8, skills: ["進行補助","入稿"], avatar: "西" },
 ];
 const initialTemplates = [
   { id: 1, title: "ロゴデザイン基本", category: "ロゴデザイン", price: 150000, hours: 24, tasks: ["ヒアリング","ラフ作成","デザイン制作","修正対応","納品"] },
@@ -64,7 +64,6 @@ const baseOrders = [
   { id: 1, projectName: "バナー制作", client: "A社", status: "納期OK", judge: "社内対応", amount: 50000, assignee: "加藤知子", finishDate: "2026-03-25", notes: "初回制作。ロゴ位置は中央寄せ。", history: [], notice: "" },
   { id: 2, projectName: "LPデザイン", client: "B社", status: "納期NG", judge: "外注推奨", amount: 120000, assignee: "本庄和志", finishDate: "2026-03-28", notes: "訴求文言の再確認が必要。", history: [], notice: "", outsourceStatus: "依頼済み", outsourceVendor: "外注デザイン社", outsourceMemo: "急ぎ案件", receivedDate: "" },
   { id: 3, projectName: "SNSキャンペーン画像", client: "チャッピー株式会社", status: "納品受信", judge: "納品受信", amount: 330000, assignee: "中井弘也", finishDate: "2026-03-20", notes: "納品済み。次回は同テイストで展開予定。", history: ["外注先より納品完了"], notice: "" },
-  { id: 4, projectName: "入稿サポート", client: "ソフトバンク", status: "納期OK", judge: "社内対応", amount: 90000, assignee: "中西崇之", finishDate: "2026-03-27", notes: "確認と入稿作業。", history: [], notice: "" },
 ];
 const initialOrders = baseOrders.map(o => ({ ...o, notice: buildNotice(o) }));
 
@@ -132,7 +131,7 @@ function extractFieldsFromText(text){
 
 function SideNav({ currentPage, setCurrentPage }){
   const items = [["dashboard","ダッシュボード"],["orders","受注管理"],["notifications","通知履歴"],["customers","顧客管理"],["staff","スタッフ管理"],["templates","テンプレート管理"],["calendar","日程カレンダー"],["outsource","外注管理"]];
-  return `<aside class="sidebar"><div class="brand">デザインマネージャー</div><div class="brand-sub">クリエイティブ管理</div><div class="nav">${items.map(([k,l])=>`<button class="${currentPage===k?'active':''}" onclick="setPage('${k}')">${l}</button>`).join("")}</div><div class="version">デザインマネージャー 公開版 v3.5.9</div></aside>`;
+  return `<aside class="sidebar"><div class="brand">デザインマネージャー</div><div class="brand-sub">クリエイティブ管理</div><div class="nav">${items.map(([k,l])=>`<button class="${currentPage===k?'active':''}" onclick="setPage('${k}')">${l}</button>`).join("")}</div><div class="version">デザインマネージャー 公開版 v3.6.1</div></aside>`;
 }
 
 const state = {
@@ -680,16 +679,15 @@ function renderCustomers(){
 
 function renderStaff(){
   return `<div class="page-head"><div><div class="page-title">スタッフ管理</div><div class="page-sub">担当者の役割と稼働状況</div></div><button class="btn primary" onclick="openStaffEditor()">スタッフ追加</button></div>
-  <div class="staff-grid">${state.staff.map(member=>{ const load = state.orders.filter(o=>o.assignee===member.name && o.status!=="納品受信").reduce((sum,o)=>sum+Math.max(Math.round(Number(o.amount||0)/10000),4),0); const percent = Math.min(Math.round(load/40*100),100); return `<div class="card"><div style="display:flex;justify-content:space-between;gap:12px"><div><div style="font-size:18px;font-weight:800">${esc(member.name)}</div><div class="help" style="margin-top:4px">${esc(member.role)}</div></div><div class="badge ok">稼働中</div></div><div class="help" style="margin-top:14px">${esc(member.company || "")}</div><div class="help" style="margin-top:8px">${esc(member.email)}</div><div style="margin-top:14px"><div style="display:flex;justify-content:space-between;font-size:12px;color:#64748b;margin-bottom:8px"><span>想定稼働</span><span>${load}時間</span></div><div class="progress"><div style="width:${percent}%"></div></div></div><div class="chips">${(member.skills||[]).map(s=>`<span class="chip">${esc(s)}</span>`).join("")}</div><div class="top-actions" style="margin-top:14px"><button class="btn" onclick="openStaffEditor(${member.id})">編集</button><button class="btn danger" onclick="deleteStaff(${member.id})">削除</button></div></div>`; }).join("")}</div>${renderStaffModal()}`;
+  <div class="staff-grid">${state.staff.map(member=>{ const load = state.orders.filter(o=>o.assignee===member.name && o.status!=="納品受信").reduce((sum,o)=>sum+Math.max(Math.round(Number(o.amount||0)/10000),4),0); const percent = Math.min(Math.round(load/40*100),100); return `<div class="card"><div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start"><div class="staff-name-wrap"><div class="staff-avatar">${esc(member.avatar || (member.name||"").slice(0,1))}</div><div><div style="font-size:18px;font-weight:800">${esc(member.name)}</div><div class="help" style="margin-top:4px">${esc(member.role)}</div></div></div><div class="badge ok">稼働中</div></div><div class="help" style="margin-top:14px">${esc(member.company || "")}</div><div class="help" style="margin-top:6px">${esc(member.email)}</div><div style="margin-top:14px"><div style="display:flex;justify-content:space-between;font-size:12px;color:#64748b;margin-bottom:8px"><span>想定稼働</span><span>${load}時間</span></div><div class="progress"><div style="width:${percent}%"></div></div></div><div class="chips">${(member.skills||[]).map(s=>`<span class="chip">${esc(s)}</span>`).join("")}</div><div class="top-actions" style="margin-top:14px"><button class="btn" onclick="openStaffEditor(${member.id})">編集</button><button class="btn danger" onclick="deleteStaff(${member.id})">削除</button></div></div>`; }).join("")}</div>${renderStaffModal()}`;
 }
 function renderStaffModal(){
   if(!state.staffEditorOpen) return "";
-  const member = state.editingStaffId ? state.staff.find(s=>s.id===state.editingStaffId) : {name:"",icon:"",company:"",role:"デザイナー",email:"",hoursPerDay:8,skills:[""]};
+  const member = state.editingStaffId ? state.staff.find(s=>s.id===state.editingStaffId) : {name:"",icon:"",role:"デザイナー",email:"",hoursPerDay:8,skills:[""]};
   return `<div class="modal-backdrop" onclick="if(event.target===this) closeStaffEditor()"><div class="modal" style="width:min(820px,100%)"><div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px"><div><h3 style="margin:0 0 6px">スタッフ編集</h3><div class="help">スタッフ情報を追加・編集できます</div></div><button class="btn" onclick="closeStaffEditor()">閉じる</button></div>
   <div class="grid-2">
     <div><div class="help" style="margin-bottom:6px">名前</div><input value="${esc(member.name||"")}" oninput="patchStaff('name', this.value)"></div>
     <div><div class="help" style="margin-bottom:6px">役職</div><input value="${esc(member.role||"")}" oninput="patchStaff('role', this.value)"></div>
-    <div><div class="help" style="margin-bottom:6px">所属</div><input value="${esc(member.company||"")}" oninput="patchStaff('company', this.value)"></div>
     <div><div class="help" style="margin-bottom:6px">メール</div><input value="${esc(member.email||"")}" oninput="patchStaff('email', this.value)"></div>
     <div><div class="help" style="margin-bottom:6px">1日稼働時間</div><input type="number" value="${esc(member.hoursPerDay||8)}" oninput="patchStaff('hoursPerDay', this.value)"></div>
     <div style="grid-column:1/-1"><div class="help" style="margin-bottom:6px">スキル（1行に1つ）</div><textarea oninput="patchStaffSkills(this.value)">${esc((member.skills||[]).join('\n'))}</textarea></div>
@@ -700,7 +698,7 @@ function patchStaff(key,val){
   if(state.editingStaffId){
     state.staff = state.staff.map(s=>s.id===state.editingStaffId?{...s,[key]:key==="hoursPerDay"?Number(val||0):val}:s);
   }else{
-    state._draftStaff = state._draftStaff || {name:"",icon:"",company:"",role:"デザイナー",email:"",hoursPerDay:8,skills:[""]};
+    state._draftStaff = state._draftStaff || {name:"",icon:"",role:"デザイナー",email:"",hoursPerDay:8,skills:[""]};
     state._draftStaff[key] = key==="hoursPerDay"?Number(val||0):val;
   }
   render();
@@ -709,7 +707,7 @@ function patchStaffSkills(text){
   if(state.editingStaffId){
     state.staff = state.staff.map(s=>s.id===state.editingStaffId?{...s,skills:text.split("\n")}:s);
   }else{
-    state._draftStaff = state._draftStaff || {name:"",icon:"",company:"",role:"デザイナー",email:"",hoursPerDay:8,skills:[""]};
+    state._draftStaff = state._draftStaff || {name:"",icon:"",role:"デザイナー",email:"",hoursPerDay:8,skills:[""]};
     state._draftStaff.skills = text.split("\n");
   }
   render();
@@ -718,7 +716,7 @@ function saveStaff(){
   if(state.editingStaffId){
     state.staff = state.staff.map(s=>s.id===state.editingStaffId?{...s,skills:(s.skills||[]).map(x=>String(x).trim()).filter(Boolean)}:s);
   }else{
-    const d = state._draftStaff || {name:"",icon:"",company:"",role:"デザイナー",email:"",hoursPerDay:8,skills:[""]};
+    const d = state._draftStaff || {name:"",icon:"",role:"デザイナー",email:"",hoursPerDay:8,skills:[""]};
     if(!d.name || !d.name.trim()) return;
     state.staff = [{...d,id:Date.now(),skills:(d.skills||[]).map(x=>String(x).trim()).filter(Boolean)}, ...state.staff];
     delete state._draftStaff;
