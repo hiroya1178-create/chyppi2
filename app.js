@@ -1,11 +1,11 @@
 
-const staffOptions = ["田中","佐藤","鈴木","高橋","上部"];
+const staffOptions = ["加藤知子","本庄和志","山口活樹","中井弘也","中西崇之"];
 const initialStaff = [
-  { id: 1, name: "田中", role: "ディレクター", email: "tanaka@design.co.jp", hoursPerDay: 8, skills: ["進行管理","クライアント対応"] },
-  { id: 2, name: "佐藤", role: "デザイナー", email: "sato@design.co.jp", hoursPerDay: 8, skills: ["LP","バナー","UI"] },
-  { id: 3, name: "鈴木", role: "イラストレーター", email: "suzuki@design.co.jp", hoursPerDay: 8, skills: ["イラスト","パッケージ"] },
-  { id: 4, name: "高橋", role: "フロントエンド", email: "takahashi@design.co.jp", hoursPerDay: 8, skills: ["コーディング","レスポンシブ"] },
-  { id: 5, name: "上部", role: "アシスタント", email: "uwabe@design.co.jp", hoursPerDay: 8, skills: ["進行補助","入稿"] },
+  { id: 1, name: "加藤知子", company: "デザインバンク", role: "ディレクター", email: "kato@design.co.jp", hoursPerDay: 8, skills: ["進行管理","クライアント対応"], avatar: "加" },
+  { id: 2, name: "本庄和志", company: "鳥取大学", role: "デザイナー", email: "honjo@design.co.jp", hoursPerDay: 8, skills: ["LP","バナー","UI"], avatar: "本" },
+  { id: 3, name: "山口活樹", company: "東亜青果", role: "イラストレーター", email: "yamaguchi@design.co.jp", hoursPerDay: 8, skills: ["イラスト","パッケージ"], avatar: "山" },
+  { id: 4, name: "中井弘也", company: "北村屋木材", role: "フロントエンド", email: "nakai@design.co.jp", hoursPerDay: 8, skills: ["コーディング","レスポンシブ"], avatar: "中" },
+  { id: 5, name: "中西崇之", company: "ソフトバンク", role: "アシスタント", email: "nakanishi@design.co.jp", hoursPerDay: 8, skills: ["進行補助","入稿"], avatar: "西" },
 ];
 const initialTemplates = [
   { id: 1, title: "ロゴデザイン基本", category: "ロゴデザイン", price: 150000, hours: 24, tasks: ["ヒアリング","ラフ作成","デザイン制作","修正対応","納品"] },
@@ -61,9 +61,9 @@ function profitClass(value){
 }
 
 const baseOrders = [
-  { id: 1, projectName: "バナー制作", client: "A社", status: "納期OK", judge: "社内対応", amount: 50000, assignee: "田中", finishDate: "2026-03-25", notes: "初回制作。ロゴ位置は中央寄せ。", history: [], notice: "" },
-  { id: 2, projectName: "LPデザイン", client: "B社", status: "納期NG", judge: "外注推奨", amount: 120000, assignee: "佐藤", finishDate: "2026-03-28", notes: "訴求文言の再確認が必要。", history: [], notice: "", outsourceStatus: "依頼済み", outsourceVendor: "外注デザイン社", outsourceMemo: "急ぎ案件", receivedDate: "" },
-  { id: 3, projectName: "SNSキャンペーン画像", client: "チャッピー株式会社", status: "納品受信", judge: "納品受信", amount: 330000, assignee: "高橋", finishDate: "2026-03-20", notes: "納品済み。次回は同テイストで展開予定。", history: ["外注先より納品完了"], notice: "" },
+  { id: 1, projectName: "バナー制作", client: "A社", status: "納期OK", judge: "社内対応", amount: 50000, assignee: "加藤知子", finishDate: "2026-03-25", notes: "初回制作。ロゴ位置は中央寄せ。", history: [], notice: "" },
+  { id: 2, projectName: "LPデザイン", client: "B社", status: "納期NG", judge: "外注推奨", amount: 120000, assignee: "本庄和志", finishDate: "2026-03-28", notes: "訴求文言の再確認が必要。", history: [], notice: "", outsourceStatus: "依頼済み", outsourceVendor: "外注デザイン社", outsourceMemo: "急ぎ案件", receivedDate: "" },
+  { id: 3, projectName: "SNSキャンペーン画像", client: "チャッピー株式会社", status: "納品受信", judge: "納品受信", amount: 330000, assignee: "中井弘也", finishDate: "2026-03-20", notes: "納品済み。次回は同テイストで展開予定。", history: ["外注先より納品完了"], notice: "" },
 ];
 const initialOrders = baseOrders.map(o => ({ ...o, notice: buildNotice(o) }));
 
@@ -131,7 +131,7 @@ function extractFieldsFromText(text){
 
 function SideNav({ currentPage, setCurrentPage }){
   const items = [["dashboard","ダッシュボード"],["orders","受注管理"],["notifications","通知履歴"],["customers","顧客管理"],["staff","スタッフ管理"],["templates","テンプレート管理"],["calendar","日程カレンダー"],["outsource","外注管理"]];
-  return `<aside class="sidebar"><div class="brand">デザインマネージャー</div><div class="brand-sub">クリエイティブ管理</div><div class="nav">${items.map(([k,l])=>`<button class="${currentPage===k?'active':''}" onclick="setPage('${k}')">${l}</button>`).join("")}</div><div class="version">デザインマネージャー 公開版 v3.5.9</div></aside>`;
+  return `<aside class="sidebar"><div class="brand">デザインマネージャー</div><div class="brand-sub">クリエイティブ管理</div><div class="nav">${items.map(([k,l])=>`<button class="${currentPage===k?'active':''}" onclick="setPage('${k}')">${l}</button>`).join("")}</div><div class="version">デザインマネージャー 公開版 v3.6.1</div></aside>`;
 }
 
 const state = {
@@ -152,7 +152,6 @@ const state = {
   calendarMonth: { year: 2026, month: 2 },
   selectedCalendarDate: null,
   calendarQuickEditId: null,
-  calendarDetailId: null,
   staffEditorOpen: false,
   editingStaffId: null,
   templateEditorOpen: false,
@@ -680,7 +679,7 @@ function renderCustomers(){
 
 function renderStaff(){
   return `<div class="page-head"><div><div class="page-title">スタッフ管理</div><div class="page-sub">担当者の役割と稼働状況</div></div><button class="btn primary" onclick="openStaffEditor()">スタッフ追加</button></div>
-  <div class="staff-grid">${state.staff.map(member=>{ const load = state.orders.filter(o=>o.assignee===member.name && o.status!=="納品受信").reduce((sum,o)=>sum+Math.max(Math.round(Number(o.amount||0)/10000),4),0); const percent = Math.min(Math.round(load/40*100),100); return `<div class="card"><div style="display:flex;justify-content:space-between;gap:12px"><div><div style="font-size:18px;font-weight:800">${esc(member.name)}</div><div class="help" style="margin-top:4px">${esc(member.role)}</div></div><div class="badge ok">稼働中</div></div><div class="help" style="margin-top:14px">${esc(member.email)}</div><div style="margin-top:14px"><div style="display:flex;justify-content:space-between;font-size:12px;color:#64748b;margin-bottom:8px"><span>想定稼働</span><span>${load}時間</span></div><div class="progress"><div style="width:${percent}%"></div></div></div><div class="chips">${(member.skills||[]).map(s=>`<span class="chip">${esc(s)}</span>`).join("")}</div><div class="top-actions" style="margin-top:14px"><button class="btn" onclick="openStaffEditor(${member.id})">編集</button><button class="btn danger" onclick="deleteStaff(${member.id})">削除</button></div></div>`; }).join("")}</div>${renderStaffModal()}`;
+  <div class="staff-grid">${state.staff.map(member=>{ const load = state.orders.filter(o=>o.assignee===member.name && o.status!=="納品受信").reduce((sum,o)=>sum+Math.max(Math.round(Number(o.amount||0)/10000),4),0); const percent = Math.min(Math.round(load/40*100),100); return `<div class="card"><div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start"><div class="staff-name-wrap"><div class="staff-avatar">${esc(member.avatar || (member.name||"").slice(0,1))}</div><div><div style="font-size:18px;font-weight:800">${esc(member.name)}</div><div class="help" style="margin-top:4px">${esc(member.role)}</div></div></div><div class="badge ok">稼働中</div></div><div class="help" style="margin-top:14px">${esc(member.company || "")}</div><div class="help" style="margin-top:6px">${esc(member.email)}</div><div style="margin-top:14px"><div style="display:flex;justify-content:space-between;font-size:12px;color:#64748b;margin-bottom:8px"><span>想定稼働</span><span>${load}時間</span></div><div class="progress"><div style="width:${percent}%"></div></div></div><div class="chips">${(member.skills||[]).map(s=>`<span class="chip">${esc(s)}</span>`).join("")}</div><div class="top-actions" style="margin-top:14px"><button class="btn" onclick="openStaffEditor(${member.id})">編集</button><button class="btn danger" onclick="deleteStaff(${member.id})">削除</button></div></div>`; }).join("")}</div>${renderStaffModal()}`;
 }
 function renderStaffModal(){
   if(!state.staffEditorOpen) return "";
@@ -782,38 +781,11 @@ function renderCalendar(){
   const ordersForDate = (date) => state.orders.filter(order => { const d = new Date(order.finishDate); return !Number.isNaN(d.getTime()) && sameDay(d, date); });
   const selectedOrders = state.selectedCalendarDate ? ordersForDate(new Date(state.selectedCalendarDate)) : [];
   return `<div class="page-head"><div><div class="page-title">日程カレンダー</div><div class="page-sub">完了予定日ベースの月間表示</div></div></div>
-  <div class="calendar-wrap"><div class="card"><div class="calendar-header"><button class="btn" onclick="changeMonth(-1)">前月</button><div style="font-size:20px;font-weight:800">${year}年 ${month+1}月</div><button class="btn" onclick="changeMonth(1)">次月</button></div><div class="calendar-grid">${weekdays.map(d=>`<div class="weekday">${d}</div>`).join("")}${cells.map(cell=>{ if(!cell) return `<div class="day empty"></div>`; const dayOrders = ordersForDate(cell); return `<button class="day ${sameDay(cell,today)?'today':''}" onclick="selectCalendarDate('${cell.toISOString()}')"><div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:8px"><span style="font-weight:700">${cell.getDate()}</span>${dayOrders.length?`<small class="chip" style="padding:4px 8px">${dayOrders.length}件</small>`:""}</div><div>${dayOrders.slice(0,3).map(o=>`<div class="detail-item ${statusClass(o.status)}" onclick="event.stopPropagation(); openCalendarDetail(${o.id})" style="padding:6px 8px;font-size:11px;margin-bottom:6px;cursor:pointer"><div style="font-weight:700">${esc(o.projectName)}</div><div>${esc(o.assignee)}</div></div>`).join("")}</div></button>`; }).join("")}</div></div>
-  <div class="card"><div style="font-weight:700;margin-bottom:14px">日付クリック詳細</div>${!state.selectedCalendarDate?`<div class="help">カレンダーの日付をクリックすると、その日の案件が表示されます。</div>`: selectedOrders.length===0?`<div class="help">${new Date(state.selectedCalendarDate).toLocaleDateString('ja-JP')} の案件はありません。</div>`: selectedOrders.map(o=>`<div class="detail-item" onclick="openCalendarDetail(${o.id})" style="cursor:pointer"><div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap"><div><div style="font-weight:700">${esc(o.projectName)}</div><div class="help" style="margin-top:6px">顧客: ${esc(o.client)} / 担当: ${esc(o.assignee)}</div></div><button class="btn primary" onclick="event.stopPropagation(); openCalendarQuickEdit(${o.id})">この案件を編集</button></div><div class="badges" style="margin-top:10px">${(() => { const a = getDeadlineAlert(o); return `<span class="alert-chip ${a.cls}">${a.label}</span>`; })()}<span class="badge ${statusClass(o.status)}">${esc(o.status)}</span><span class="badge ${judgeClass(o.judge)}">${esc(o.judge)}</span></div></div>`).join("")}</div></div>${renderCalendarDetailModal()}${renderCalendarQuickEditModal()}`;
+  <div class="calendar-wrap"><div class="card"><div class="calendar-header"><button class="btn" onclick="changeMonth(-1)">前月</button><div style="font-size:20px;font-weight:800">${year}年 ${month+1}月</div><button class="btn" onclick="changeMonth(1)">次月</button></div><div class="calendar-grid">${weekdays.map(d=>`<div class="weekday">${d}</div>`).join("")}${cells.map(cell=>{ if(!cell) return `<div class="day empty"></div>`; const dayOrders = ordersForDate(cell); return `<button class="day ${sameDay(cell,today)?'today':''}" onclick="selectCalendarDate('${cell.toISOString()}')"><div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:8px"><span style="font-weight:700">${cell.getDate()}</span>${dayOrders.length?`<small class="chip" style="padding:4px 8px">${dayOrders.length}件</small>`:""}</div><div>${dayOrders.slice(0,3).map(o=>`<div class="detail-item ${statusClass(o.status)}" style="padding:6px 8px;font-size:11px;margin-bottom:6px"><div style="font-weight:700">${esc(o.projectName)}</div><div>${esc(o.assignee)}</div></div>`).join("")}</div></button>`; }).join("")}</div></div>
+  <div class="card"><div style="font-weight:700;margin-bottom:14px">日付クリック詳細</div>${!state.selectedCalendarDate?`<div class="help">カレンダーの日付をクリックすると、その日の案件が表示されます。</div>`: selectedOrders.length===0?`<div class="help">${new Date(state.selectedCalendarDate).toLocaleDateString('ja-JP')} の案件はありません。</div>`: selectedOrders.map(o=>`<div class="detail-item"><div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap"><div><div style="font-weight:700">${esc(o.projectName)}</div><div class="help" style="margin-top:6px">顧客: ${esc(o.client)} / 担当: ${esc(o.assignee)}</div></div><button class="btn primary" onclick="openCalendarQuickEdit(${o.id})">この案件を編集</button></div><div class="badges" style="margin-top:10px">${(() => { const a = getDeadlineAlert(o); return `<span class="alert-chip ${a.cls}">${a.label}</span>`; })()}<span class="badge ${statusClass(o.status)}">${esc(o.status)}</span><span class="badge ${judgeClass(o.judge)}">${esc(o.judge)}</span></div></div>`).join("")}</div></div>${renderCalendarQuickEditModal()}`;
 }
 function changeMonth(delta){ let {year, month} = state.calendarMonth; month += delta; if(month<0){month=11;year-=1} if(month>11){month=0;year+=1} state.calendarMonth={year,month}; render(); }
 function selectCalendarDate(iso){ state.selectedCalendarDate = iso; render(); }
-function openCalendarDetail(id){ state.calendarDetailId = id; render(); }
-function closeCalendarDetail(){ state.calendarDetailId = null; render(); }
-function renderCalendarDetailModal(){
-  if(!state.calendarDetailId) return "";
-  const order = state.orders.find(o=>o.id===state.calendarDetailId); if(!order) return "";
-  const alert = getDeadlineAlert(order);
-  return `<div class="modal-backdrop" onclick="if(event.target===this) closeCalendarDetail()"><div class="modal" style="width:min(760px,100%)">
-    <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px">
-      <div><h3 style="margin:0 0 6px">案件詳細</h3><div class="help">カレンダー上の予定詳細です</div></div>
-      <button class="btn" onclick="closeCalendarDetail()">閉じる</button>
-    </div>
-    <div class="grid-2">
-      <div><div class="help" style="margin-bottom:6px">案件名</div><input value="${esc(order.projectName || "")}" readonly></div>
-      <div><div class="help" style="margin-bottom:6px">顧客名</div><input value="${esc(order.client || "")}" readonly></div>
-      <div><div class="help" style="margin-bottom:6px">担当者</div><input value="${esc(order.assignee || "")}" readonly></div>
-      <div><div class="help" style="margin-bottom:6px">完了予定日</div><input value="${esc(order.finishDate || "")}" readonly></div>
-      <div><div class="help" style="margin-bottom:6px">金額</div><input value="${Number(order.amount || 0).toLocaleString('ja-JP')}円" readonly></div>
-      <div><div class="help" style="margin-bottom:6px">判断</div><input value="${esc(order.judge || "")}" readonly></div>
-      <div style="grid-column:1/-1"><div class="help" style="margin-bottom:6px">ステータス</div><div class="badges"><span class="alert-chip ${alert.cls}">${alert.label}</span><span class="badge ${statusClass(order.status)}">${esc(order.status)}</span><span class="badge ${judgeClass(order.judge)}">${esc(order.judge)}</span></div></div>
-      <div style="grid-column:1/-1"><div class="help" style="margin-bottom:6px">メモ</div><textarea readonly style="min-height:120px">${esc(order.notes || "")}</textarea></div>
-    </div>
-    <div class="top-actions" style="justify-content:flex-end;margin-top:16px">
-      <button class="btn" onclick="closeCalendarDetail()">閉じる</button>
-      <button class="btn primary" onclick="closeCalendarDetail(); openCalendarQuickEdit(${order.id})">この案件を編集</button>
-    </div>
-  </div></div>`;
-}
 function renderCalendarQuickEditModal(){
   if(!state.calendarQuickEditId) return "";
   const order = state.orders.find(o=>o.id===state.calendarQuickEditId); if(!order) return "";
